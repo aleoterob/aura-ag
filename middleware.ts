@@ -1,16 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 
-export function middleware(request: NextRequest) {
-  // Obtener la ruta actual
+export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  // Verificar autenticación de Supabase
-  const accessToken = request.cookies.get("sb-access-token")?.value;
-  const refreshToken = request.cookies.get("sb-refresh-token")?.value;
-  const isAuthenticated = !!(accessToken || refreshToken);
-
-  // Redirigir la página principal a login siempre
+  // Redirigir / a /login
   if (path === "/") {
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -18,18 +13,53 @@ export function middleware(request: NextRequest) {
   // Rutas públicas que no requieren autenticación
   const isPublicPath = path === "/login" || path === "/register";
 
-  // Si no está autenticado y trata de acceder a rutas protegidas
-  if (!isAuthenticated && !isPublicPath) {
+  if (isPublicPath) {
+    return NextResponse.next();
+  }
+
+  try {
+    // Crear cliente de Supabase para middleware
+    const response = NextResponse.next();
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return request.cookies.get(name)?.value;
+          },
+          set(name: string, value: string, options: Record<string, unknown>) {
+            response.cookies.set({
+              name,
+              value,
+              ...options,
+            });
+          },
+          remove(name: string, options: Record<string, unknown>) {
+            response.cookies.set({
+              name,
+              value: "",
+              ...options,
+            });
+          },
+        },
+      }
+    );
+
+    // Verificar la sesión
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error in middleware:", error);
     return NextResponse.redirect(new URL("/login", request.url));
   }
-
-  // Si está autenticado y trata de acceder a login/register
-  if (isAuthenticated && (path === "/login" || path === "/register")) {
-    return NextResponse.redirect(new URL("/home", request.url));
-  }
-
-  // Permitir continuar con la petición
-  return NextResponse.next();
 }
 
 // Configurar en qué rutas se ejecuta el middleware
