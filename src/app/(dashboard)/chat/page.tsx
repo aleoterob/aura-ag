@@ -183,7 +183,7 @@ const ChatBotDemo = () => {
         </div>
       </div>
 
-      <div className="flex-shrink-0 border-t bg-background">
+      <div className="flex-shrink-0 bg-background">
         <div className="mx-auto max-w-3xl p-4">
           <PromptInput onSubmit={handleSubmit} globalDrop multiple>
             <PromptInputBody>

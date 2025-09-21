@@ -458,7 +458,7 @@ export type PromptInputTextareaProps = ComponentProps<typeof Textarea>;
 export const PromptInputTextarea = ({
   onChange,
   className,
-  placeholder = "What would you like to know?",
+  placeholder = "Que te gustaria saber?",
   ...props
 }: PromptInputTextareaProps) => {
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
@@ -539,7 +539,7 @@ export const PromptInputButton = ({
   ...props
 }: PromptInputButtonProps) => {
   const newSize =
-    (size ?? Children.count(props.children) > 1) ? "default" : "icon";
+    size ?? Children.count(props.children) > 1 ? "default" : "icon";
 
   return (
     <Button
