@@ -93,7 +93,7 @@ export default function DashboardLayout({
       </Sidebar>
 
       <SidebarInset className="overflow-hidden">
-        <div className="h-full overflow-hidden">{children}</div>
+        <div className="h-screen overflow-hidden">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
