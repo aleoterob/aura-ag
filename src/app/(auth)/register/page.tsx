@@ -27,7 +27,7 @@ export default function RegisterPage() {
   // Redirigir si ya está autenticado
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/home");
+      router.push("/chat");
     }
   }, [isAuthenticated, router]);
 

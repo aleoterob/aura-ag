@@ -15,7 +15,7 @@ import {
   SidebarTrigger,
   SidebarInset,
 } from "@/components/ui/sidebar";
-import { Home, Users, Settings, BarChart3, LogOut } from "lucide-react";
+import { Home, MessageCircle, LogOut } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -39,7 +39,7 @@ export default function DashboardLayout({
               <Home className="h-4 w-4" />
             </div>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">Mi App</span>
+              <span className="truncate font-semibold">AuraAG</span>
               <span className="truncate text-xs">Dashboard</span>
             </div>
           </div>
@@ -52,36 +52,9 @@ export default function DashboardLayout({
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <Link href="/home">
-                      <Home className="h-4 w-4" />
-                      <span>Inicio</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/dashboard">
-                      <BarChart3 className="h-4 w-4" />
-                      <span>Dashboard</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/users">
-                      <Users className="h-4 w-4" />
-                      <span>Usuarios</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/settings">
-                      <Settings className="h-4 w-4" />
-                      <span>Configuración</span>
+                    <Link href="/chat">
+                      <MessageCircle className="h-4 w-4" />
+                      <span>Chat</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

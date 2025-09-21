@@ -26,7 +26,7 @@ export default function LoginPage() {
   // Redirigir si ya está autenticado
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/home");
+      router.push("/chat");
     }
   }, [isAuthenticated, router]);
 
@@ -42,7 +42,7 @@ export default function LoginPage() {
 
     try {
       await signIn(email, password);
-      router.push("/home");
+      router.push("/chat");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Error al iniciar sesión");
     } finally {
