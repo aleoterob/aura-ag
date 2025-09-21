@@ -94,7 +94,7 @@ const ChatBotDemo = () => {
   return (
     <div className="flex h-full flex-col">
       <div className="flex-1 overflow-hidden">
-        <div className="mx-auto max-w-2xl h-full">
+        <div className="mx-auto max-w-3xl h-full">
           <Conversation className="h-full">
             <ConversationContent className="h-full overflow-y-auto">
               {messages.map((message) => (
@@ -184,7 +184,7 @@ const ChatBotDemo = () => {
       </div>
 
       <div className="flex-shrink-0 border-t bg-background">
-        <div className="mx-auto max-w-2xl p-4">
+        <div className="mx-auto max-w-3xl p-4">
           <PromptInput onSubmit={handleSubmit} globalDrop multiple>
             <PromptInputBody>
               <PromptInputAttachments>
