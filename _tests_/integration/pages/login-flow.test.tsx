@@ -1,10 +1,5 @@
 import { screen, waitFor } from "@testing-library/react";
-import {
-  renderWithProviders,
-  createMockUseAuth,
-  testUsers,
-  testUtils,
-} from "../../__fixtures__";
+import { renderWithProviders, testUtils } from "../../__fixtures__";
 import { useAuth } from "@/hooks/use-auth";
 import LoginPage from "@/app/(auth)/login/page";
 
@@ -144,9 +139,29 @@ describe("Login Flow Integration Test", () => {
 
   it("redirects authenticated users to home", () => {
     mockUseAuth.mockReturnValue({
-      user: { id: "1", email: "test@example.com" } as any,
+      user: {
+        id: "1",
+        email: "test@example.com",
+        app_metadata: {},
+        user_metadata: {},
+        aud: "authenticated",
+        created_at: "2024-01-01T00:00:00Z",
+      },
       profile: null,
-      session: {} as any,
+      session: {
+        access_token: "mock-token",
+        refresh_token: "mock-refresh",
+        expires_in: 3600,
+        token_type: "bearer",
+        user: {
+          id: "1",
+          email: "test@example.com",
+          app_metadata: {},
+          user_metadata: {},
+          aud: "authenticated",
+          created_at: "2024-01-01T00:00:00Z",
+        },
+      },
       loading: false,
       signIn: jest.fn().mockResolvedValue({}),
       signUp: jest.fn().mockResolvedValue({}),

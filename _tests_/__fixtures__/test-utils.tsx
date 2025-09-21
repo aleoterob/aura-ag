@@ -3,7 +3,6 @@ import { render, RenderOptions } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
-import { useRouter } from "next/navigation";
 import "@testing-library/jest-dom";
 import { mockSupabaseResponses } from "./api-responses";
 import { testUsers } from "./mock-data";
@@ -101,7 +100,6 @@ export const renderWithProviders = (
   {
     queryClient = createTestQueryClient(),
     theme = "light",
-    initialEntries = ["/"],
     ...renderOptions
   }: CustomRenderOptions = {}
 ) => {
@@ -135,7 +133,7 @@ export const testUtils = {
   },
 
   // Mock successful API response
-  mockApiSuccess: (data: any) => ({
+  mockApiSuccess: (data: unknown) => ({
     data,
     error: null,
   }),
@@ -172,7 +170,7 @@ export const testUtils = {
   },
 
   // Mock fetch
-  mockFetch: (response: any, ok = true, status = 200) => {
+  mockFetch: (response: unknown, ok = true, status = 200) => {
     return jest.fn().mockResolvedValue({
       ok,
       status,
@@ -183,17 +181,19 @@ export const testUtils = {
 
   // Mock window.location
   mockLocation: (url: string) => {
-    delete (window as any).location;
-    window.location = {
-      href: url,
-      origin: "http://localhost:3000",
-      pathname: new URL(url).pathname,
-      search: new URL(url).search,
-      hash: new URL(url).hash,
-      assign: jest.fn(),
-      replace: jest.fn(),
-      reload: jest.fn(),
-    } as any;
+    Object.defineProperty(window, "location", {
+      value: {
+        href: url,
+        origin: "http://localhost:3000",
+        pathname: new URL(url).pathname,
+        search: new URL(url).search,
+        hash: new URL(url).hash,
+        assign: jest.fn(),
+        replace: jest.fn(),
+        reload: jest.fn(),
+      },
+      writable: true,
+    });
   },
 
   // Mock IntersectionObserver
@@ -241,7 +241,7 @@ export const setupTest = () => {
 };
 
 // Export everything as default for convenience
-export default {
+const testUtilsExports = {
   mockRouter,
   createMockUseAuth,
   createMockAuthenticatedUser,
@@ -250,3 +250,5 @@ export default {
   testUtils,
   setupTest,
 };
+
+export default testUtilsExports;
