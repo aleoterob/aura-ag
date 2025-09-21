@@ -22,6 +22,83 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Testing
+
+This project includes comprehensive testing setup with Jest, React Testing Library, and Playwright.
+
+### Unit Tests
+
+Run unit tests:
+
+```bash
+pnpm test
+```
+
+Run tests in watch mode:
+
+```bash
+pnpm test:watch
+```
+
+Run tests with coverage:
+
+```bash
+pnpm test:coverage
+```
+
+### End-to-End Tests
+
+Run E2E tests:
+
+```bash
+pnpm test:e2e
+```
+
+Run E2E tests with UI:
+
+```bash
+pnpm test:e2e:ui
+```
+
+Run E2E tests in headed mode:
+
+```bash
+pnpm test:e2e --headed
+```
+
+Run specific E2E test:
+
+```bash
+pnpm test:e2e login.spec.ts
+```
+
+**E2E Test Structure:**
+
+- `_tests_/e2e/specs/` - Test specifications
+- `_tests_/e2e/page-objects/` - Page Object Model classes
+- `_tests_/e2e/fixtures/` - Test fixtures and shared data
+- `_tests_/e2e/playwright.config.ts` - Playwright configuration
+
+**Test Categories:**
+
+- Login Flow Tests - Form validation, authentication
+- Dashboard Tests - Navigation, session management
+- User Journey Tests - Complete user workflows
+
+### Coverage Reports
+
+Coverage reports are generated in multiple formats:
+
+- **Terminal**: Shows coverage summary in console
+- **HTML**: Detailed report in `coverage/index.html`
+- **LCOV**: For integration with CI/CD tools
+
+The coverage configuration includes:
+
+- Collects coverage from `src/**/*.{js,jsx,ts,tsx}`
+- Excludes type definitions, stories, and config files
+- Generates reports in text, HTML, and LCOV formats
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
