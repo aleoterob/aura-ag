@@ -18,11 +18,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import type { ChatStatus, FileUIPart } from "ai";
 import {
+  ArrowUpIcon,
   ImageIcon,
   Loader2Icon,
   PaperclipIcon,
   PlusIcon,
-  SendIcon,
   SquareIcon,
   XIcon,
 } from "lucide-react";
@@ -84,7 +84,7 @@ export function PromptInputAttachment({
 
   return (
     <div
-      className={cn("group relative h-14 w-14 rounded-md border", className)}
+      className={cn("group relative h-14 w-14 rounded-md ", className)}
       key={data.id}
       {...props}
     >
@@ -434,7 +434,7 @@ export const PromptInput = ({
       />
       <form
         className={cn(
-          "w-full divide-y overflow-hidden rounded-xl border bg-background shadow-sm",
+          "w-full overflow-hidden rounded-2xl border bg-background shadow-sm",
           className
         )}
         onSubmit={handleSubmit}
@@ -509,7 +509,7 @@ export const PromptInputToolbar = ({
   ...props
 }: PromptInputToolbarProps) => (
   <div
-    className={cn("flex items-center justify-between p-1", className)}
+    className={cn("flex items-center justify-between p-2", className)}
     {...props}
   />
 );
@@ -538,15 +538,14 @@ export const PromptInputButton = ({
   size,
   ...props
 }: PromptInputButtonProps) => {
-  const newSize =
-    size ?? Children.count(props.children) > 1 ? "default" : "icon";
+  const newSize = size ?? Children.count(props.children) > 1 ? "sm" : "icon";
 
   return (
     <Button
       className={cn(
-        "shrink-0 gap-1.5 rounded-lg",
+        "shrink-0 gap-1.5 rounded-lg text-xs",
         variant === "ghost" && "text-muted-foreground",
-        newSize === "default" && "px-3",
+        newSize === "sm" && "px-3",
         className
       )}
       size={newSize}
@@ -612,7 +611,7 @@ export const PromptInputSubmit = ({
   children,
   ...props
 }: PromptInputSubmitProps) => {
-  let Icon = <SendIcon className="size-4" />;
+  let Icon = <ArrowUpIcon className="size-5" />;
 
   if (status === "submitted") {
     Icon = <Loader2Icon className="size-4 animate-spin" />;
@@ -624,7 +623,7 @@ export const PromptInputSubmit = ({
 
   return (
     <Button
-      className={cn("gap-1.5 rounded-lg", className)}
+      className={cn("gap-1.5 rounded-full", className)}
       size={size}
       type="submit"
       variant={variant}
@@ -650,8 +649,9 @@ export const PromptInputModelSelectTrigger = ({
   ...props
 }: PromptInputModelSelectTriggerProps) => (
   <SelectTrigger
+    size="sm"
     className={cn(
-      "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors",
+      "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors text-xs",
       'hover:bg-accent hover:text-foreground [&[aria-expanded="true"]]:bg-accent [&[aria-expanded="true"]]:text-foreground',
       className
     )}

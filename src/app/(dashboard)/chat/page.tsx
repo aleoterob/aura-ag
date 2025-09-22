@@ -96,7 +96,7 @@ const ChatBotDemo = () => {
       <div className="flex-1 overflow-hidden">
         <div className="mx-auto max-w-3xl h-full">
           <Conversation className="h-full">
-            <ConversationContent className="h-full overflow-y-auto">
+            <ConversationContent className="h-full overflow-y-auto scrollbar-transparent">
               {messages.map((message) => (
                 <div key={message.id}>
                   {message.role === "assistant" &&
@@ -208,7 +208,7 @@ const ChatBotDemo = () => {
                   onClick={() => setWebSearch(!webSearch)}
                 >
                   <GlobeIcon size={16} />
-                  <span>Search</span>
+                  <span>Buscar</span>
                 </PromptInputButton>
                 <PromptInputModelSelect
                   onValueChange={(value) => {
