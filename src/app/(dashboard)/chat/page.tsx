@@ -30,6 +30,8 @@ import {
 import { Actions, Action } from "@/components/ai-elements/actions";
 import { useState, Fragment, useRef, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
+import { useChat as useSupabaseChat } from "@/hooks/use-chat";
+import { useAuth } from "@/hooks/use-auth";
 import { Response } from "@/components/ai-elements/response";
 import { GlobeIcon, RefreshCcwIcon, CopyIcon } from "lucide-react";
 import {
@@ -61,6 +63,15 @@ const ChatBotDemo = () => {
   const [model, setModel] = useState<string>(models[0].value);
   const [webSearch, setWebSearch] = useState(false);
   const { messages, sendMessage, status, regenerate } = useChat();
+  const { user, loading: authLoading } = useAuth();
+  const {
+    currentConversation,
+    createConversation,
+    addMessage,
+    selectConversation,
+    conversations,
+    loading: supabaseLoading,
+  } = useSupabaseChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto scroll to bottom when new messages are added
@@ -68,7 +79,40 @@ const ChatBotDemo = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSubmit = (message: PromptInputMessage) => {
+  // No crear conversación automáticamente - solo cuando el usuario envíe un mensaje
+
+  // Guardar mensajes en Supabase cuando cambien
+  useEffect(() => {
+    if (!currentConversation) return;
+
+    const saveMessages = async () => {
+      for (const message of messages) {
+        if (message.role === "user" || message.role === "assistant") {
+          try {
+            await addMessage(
+              currentConversation.id,
+              message.role,
+              message.parts?.find((part) => part.type === "text")?.text || "",
+              { parts: message.parts },
+              message.role === "assistant" ? model : undefined
+            );
+          } catch (error) {
+            // Solo loggear si el mensaje no existe ya
+            if (
+              !(error instanceof Error) ||
+              !error.message?.includes("duplicate")
+            ) {
+              console.error("Error saving message:", error);
+            }
+          }
+        }
+      }
+    };
+
+    saveMessages();
+  }, [messages, currentConversation, addMessage, model]);
+
+  const handleSubmit = async (message: PromptInputMessage) => {
     const hasText = Boolean(message.text);
     const hasAttachments = Boolean(message.files?.length);
 
@@ -76,6 +120,35 @@ const ChatBotDemo = () => {
       return;
     }
 
+    // Crear conversación si no existe (primer mensaje del usuario)
+    let conversationToUse = currentConversation;
+    if (!conversationToUse && message.text) {
+      try {
+        conversationToUse = await createConversation(
+          message.text.slice(0, 50) + (message.text.length > 50 ? "..." : ""),
+          model
+        );
+      } catch (error) {
+        console.error("Error creating conversation:", error);
+        return;
+      }
+    }
+
+    // Guardar mensaje del usuario inmediatamente en Supabase
+    if (conversationToUse && message.text) {
+      try {
+        await addMessage(
+          conversationToUse.id,
+          "user",
+          message.text,
+          message.files ? { files: message.files } : undefined
+        );
+      } catch (error) {
+        console.error("Error saving user message:", error);
+      }
+    }
+
+    // Enviar mensaje al AI
     sendMessage(
       {
         text: message.text || "Sent with attachments",
