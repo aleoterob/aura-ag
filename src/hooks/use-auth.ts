@@ -4,18 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
-
-interface Profile {
-  id: string;
-  full_name: string | null;
-  email: string | null;
-  bio: string | null;
-  avatar_url: string | null;
-  role: string | null;
-  status: string | null;
-  created_at: string;
-  updated_at: string;
-}
+import type { Profile } from "@/lib/db/schema/public/profiles";
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);

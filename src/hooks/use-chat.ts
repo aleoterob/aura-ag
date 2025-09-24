@@ -3,31 +3,8 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "./use-auth";
-
-export interface Conversation {
-  id: string;
-  user_id: string;
-  title: string;
-  model: string;
-  system_prompt: string | null;
-  web_search_enabled: boolean;
-  is_archived: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Message {
-  id: string;
-  conversation_id: string;
-  role: "user" | "assistant" | "system";
-  content: string;
-  metadata: Record<string, unknown> | null;
-  sequence: number;
-  model_used: string | null;
-  tokens_used: number | null;
-  created_at: string;
-  updated_at: string;
-}
+import type { Conversation } from "@/lib/db/schema/public/conversations";
+import type { Message, MessageRole } from "@/lib/db/schema/public/messages";
 
 export function useChat() {
   const { user } = useAuth();
@@ -204,7 +181,7 @@ export function useChat() {
 
   const addMessage = async (
     conversationId: string,
-    role: "user" | "assistant" | "system",
+    role: MessageRole,
     content: string,
     metadata?: Record<string, unknown>,
     modelUsed?: string,

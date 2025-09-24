@@ -1,16 +1,5 @@
 import type { User, Session } from "@supabase/supabase-js";
-
-export interface Profile {
-  id: string;
-  full_name: string | null;
-  email: string | null;
-  bio: string | null;
-  avatar_url: string | null;
-  role: string | null;
-  status: string | null;
-  created_at: string;
-  updated_at: string;
-}
+import type { Profile } from "@/lib/db/schema/public/profiles";
 
 // Mock API responses for authentication
 export const mockAuthResponses = {
@@ -83,8 +72,8 @@ export const mockProfileResponses = {
     avatar_url: "https://example.com/avatar.jpg",
     role: "user",
     status: "active",
-    created_at: "2024-01-01T00:00:00Z",
-    updated_at: "2024-01-01T00:00:00Z",
+    created_at: new Date("2024-01-01T00:00:00Z"),
+    updated_at: new Date("2024-01-01T00:00:00Z"),
   } as Profile,
   notFound: null,
   error: {
