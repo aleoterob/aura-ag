@@ -6,6 +6,8 @@ import { useAuth } from "./use-auth";
 import type { Conversation } from "@/lib/db/schema/public/conversations";
 import type { Message, MessageRole } from "@/lib/db/schema/public/messages";
 
+export type { Conversation, Message, MessageRole };
+
 export function useChat() {
   const { user } = useAuth();
   const [conversations, setConversations] = useState<Conversation[]>([]);
