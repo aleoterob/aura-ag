@@ -1,0 +1,54 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior"
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesión",
+      "description": "Ingresa con tu email y contraseña",
+      "email": "Email",
+      "password": "Contraseña",
+      "emailPlaceholder": "tu@email.com",
+      "passwordPlaceholder": "Tu contraseña",
+      "submit": "Iniciar Sesión",
+      "submitting": "Iniciando sesión...",
+      "error": "Error al iniciar sesión",
+      "noAccount": "¿No tienes una cuenta?",
+      "registerLink": "Regístrate aquí"
+    },
+    "register": {
+      "title": "Crear Cuenta",
+      "description": "Ingresa tus datos para crear una nueva cuenta",
+      "fullName": "Nombre Completo",
+      "fullNamePlaceholder": "Tu nombre completo",
+      "email": "Email",
+      "emailPlaceholder": "tu@email.com",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Tu contraseña",
+      "submit": "Crear Cuenta",
+      "submitting": "Creando cuenta...",
+      "error": "Error al registrarse",
+      "success": "¡Registro exitoso! Revisa tu email para confirmar tu cuenta.",
+      "hasAccount": "¿Ya tienes una cuenta?",
+      "loginLink": "Iniciar Sesión"
+    }
+  },
+  "dashboard": {
+    "newChat": "Nuevo Chat",
+    "conversations": "Conversaciones",
+    "settings": "Configuración",
+    "signOut": "Cerrar Sesión",
+    "user": "Usuario"
+  }
+}

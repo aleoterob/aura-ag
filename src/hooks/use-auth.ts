@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import { supabase } from "@/lib/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 import type { Profile } from "@/lib/db/schema/public/profiles";
@@ -12,14 +13,13 @@ export function useAuth() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const locale = useLocale();
 
   useEffect(() => {
-    // Obtener sesión inicial
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
 
-      // Cargar perfil si hay usuario
       if (session?.user) {
         loadProfile(session.user.id);
       } else {
@@ -27,14 +27,12 @@ export function useAuth() {
       }
     });
 
-    // Escuchar cambios en la autenticación
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
 
-      // Cargar perfil si hay usuario
       if (session?.user) {
         loadProfile(session.user.id);
       } else {
@@ -96,7 +94,7 @@ export function useAuth() {
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
-    router.push("/login");
+    router.push(`/${locale}/login`);
   };
 
   return {

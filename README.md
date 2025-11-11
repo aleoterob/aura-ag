@@ -1,6 +1,6 @@
 # Aura AG
 
-Modern chatbot web application with authentication and conversation persistence, built with Next.js and Supabase.
+Modern chatbot web application with authentication and conversation persistence, built with Next.js 16.0.1 and Supabase.
 
 ## Description
 
@@ -10,10 +10,11 @@ Aura AG is an intelligent chatbot application that allows users to have conversa
 
 ### Framework and Core
 
-- **Next.js 15.5.3** - React framework with App Router and Turbopack support
-- **React 19.1.0** - UI library
+- **Next.js 16.0.1** - React framework with App Router and Turbopack support
+- **React 19.2.0** - UI library
 - **TypeScript 5** - Static typing
 - **Turbopack** - High-speed bundler for development
+- **next-intl** (v4.5.1) - Internationalization (i18n) for Next.js App Router
 
 ### Authentication and Database
 
@@ -83,8 +84,41 @@ Aura AG is an intelligent chatbot application that allows users to have conversa
 ### Development
 
 - **ESLint** (v9) - Code linter
-- **eslint-config-next** (v15.5.3) - ESLint configuration for Next.js
+- **eslint-config-next** (v16.0.1) - ESLint configuration for Next.js
 - **@tailwindcss/postcss** (v4) - PostCSS plugin for Tailwind
+
+## Internationalization (i18n)
+
+The application supports multiple languages using **next-intl**:
+
+- **Supported locales**: English (`en`) and Spanish (`es`)
+- **Default locale**: Spanish (`es`)
+- **Configuration**: `src/i18n.ts` - Defines locales and loads translation messages
+- **Routing**: All routes are prefixed with locale (e.g., `/es/login`, `/en/login`)
+- **Translation files**: Located in `messages/` directory (`en.json`, `es.json`)
+- **Proxy**: `src/proxy.ts` - Handles locale routing and authentication (Next.js 16)
+
+### i18n Features
+
+- Automatic locale detection and routing
+- Server-side and client-side translations
+- Type-safe translations with TypeScript
+- Locale-aware navigation and redirects
+- All UI texts translated (authentication, dashboard, common actions)
+
+### Adding Translations
+
+1. Add new keys to `messages/en.json` and `messages/es.json`
+2. Use `useTranslations` hook in components:
+   ```typescript
+   const t = useTranslations("auth.login");
+   return <h1>{t("title")}</h1>;
+   ```
+3. Use `getTranslations` in server components:
+   ```typescript
+   const t = await getTranslations("dashboard");
+   return <h1>{t("newChat")}</h1>;
+   ```
 
 ## Authentication
 
@@ -92,7 +126,7 @@ Authentication is fully managed through **Supabase Auth**. The project uses:
 
 - **Browser client** (`src/lib/supabase/client.ts`) - For client-side operations
 - **Server client** (`src/lib/supabase/server.ts`) - For SSR and API route operations
-- **Middleware** (`middleware.ts`) - Route protection and session verification
+- **Proxy** (`src/proxy.ts`) - Route protection, session verification, and locale routing (Next.js 16)
 - **Custom hook** (`src/hooks/use-auth.ts`) - Authentication state management
 
 ### Authentication Features
@@ -153,17 +187,18 @@ pnpm db:seed      # Run initial data seed
 aura-ag/
 ├── src/
 │   ├── app/                      # Next.js App Router
-│   │   ├── (auth)/               # Authentication route group
-│   │   │   ├── login/           # Login page
-│   │   │   └── register/        # Registration page
-│   │   ├── (dashboard)/          # Protected route group
-│   │   │   ├── chat/            # Main chatbot page
-│   │   │   ├── settings/        # User settings
-│   │   │   └── layout.tsx       # Dashboard layout
+│   │   ├── [locale]/            # Locale-prefixed routes (i18n)
+│   │   │   ├── login/           # Login page (/es/login, /en/login)
+│   │   │   ├── register/        # Registration page (/es/register, /en/register)
+│   │   │   ├── (dashboard)/     # Protected route group
+│   │   │   │   ├── chat/        # Main chatbot page
+│   │   │   │   ├── settings/    # User settings
+│   │   │   │   └── layout.tsx   # Dashboard layout
+│   │   │   └── layout.tsx       # Locale layout (provides i18n context)
 │   │   ├── api/                  # API Routes
 │   │   │   └── chat/            # Chatbot endpoint
 │   │   ├── layout.tsx            # Root layout
-│   │   └── page.tsx              # Home page (redirects to /login)
+│   │   └── page.tsx              # Home page (redirects to /es/login)
 │   ├── components/
 │   │   ├── ai-elements/         # Chatbot-specific components
 │   │   │   ├── conversation.tsx # Conversation component
@@ -197,7 +232,12 @@ aura-ag/
 │   │   ├── tanstack/
 │   │   │   └── query-client.tsx # React Query configuration
 │   │   └── utils.ts             # General utilities
+│   ├── i18n.ts                  # next-intl configuration
+│   ├── proxy.ts                 # Next.js 16 proxy (route protection + i18n)
 │   └── ...
+├── messages/                     # Translation files
+│   ├── en.json                  # English translations
+│   └── es.json                  # Spanish translations
 ├── _tests_/                      # Tests
 │   ├── __fixtures__/            # Test data and mocks
 │   ├── integration/             # Integration tests
@@ -207,29 +247,36 @@ aura-ag/
 │       ├── components/
 │       ├── lib/
 │       └── utils/
-├── middleware.ts                 # Next.js middleware (route protection)
 ├── drizzle.config.ts             # Drizzle Kit configuration
 ├── jest.config.ts                # Jest configuration
 ├── jest.setup.ts                 # Jest setup
-├── next.config.ts                # Next.js configuration
+├── next.config.ts                # Next.js configuration (includes next-intl plugin)
 ├── tsconfig.json                 # TypeScript configuration
 └── package.json                  # Dependencies and scripts
 ```
 
 ## Main Files
 
+### Internationalization
+
+- `src/i18n.ts` - next-intl configuration (locales, message loading)
+- `src/proxy.ts` - Next.js 16 proxy (locale routing + authentication)
+- `messages/en.json` - English translations
+- `messages/es.json` - Spanish translations
+- `src/app/[locale]/layout.tsx` - Locale-specific layout with i18n provider
+
 ### Authentication
 
 - `src/lib/supabase/client.ts` - Supabase client for browser
 - `src/lib/supabase/server.ts` - Supabase client for server
 - `src/hooks/use-auth.ts` - Authentication hook with session and profile management
-- `middleware.ts` - Route protection middleware
+- `src/proxy.ts` - Route protection and locale routing proxy
 
 ### Chatbot and Conversations
 
 - `src/app/api/chat/route.ts` - API route for chatbot endpoint
 - `src/hooks/use-chat.ts` - Hook for conversation and message management in Supabase
-- `src/app/(dashboard)/chat/page.tsx` - Main chatbot page
+- `src/app/[locale]/(dashboard)/chat/page.tsx` - Main chatbot page
 - `src/components/ai-elements/` - Chatbot-specific components
 
 ### Database
@@ -394,11 +441,13 @@ pnpm dev
 
 5. **Open in browser:**
    - Navigate to [http://localhost:3000](http://localhost:3000)
-   - The application will automatically redirect to `/login`
+   - The application will automatically redirect to `/es/login` (default locale)
+   - Access English version at `/en/login`
 
 ## Main Features
 
 - ✅ Complete authentication with Supabase
+- ✅ Internationalization (i18n) with English and Spanish support
 - ✅ Chatbot with multiple AI models (GPT-4o, Deepseek R1)
 - ✅ Conversation persistence in Supabase
 - ✅ Optional web search with Perplexity
@@ -413,14 +462,11 @@ pnpm dev
 
 ## Key Technologies
 
-- **Next.js 15** with App Router and Turbopack for ultra-fast development
+- **Next.js 16** with App Router and Turbopack for ultra-fast development
+- **next-intl** for internationalization (i18n) with locale routing
 - **Supabase** for authentication and PostgreSQL database
 - **Vercel AI SDK** for AI model integration
 - **Drizzle ORM** for type-safe database queries
 - **Radix UI + Tailwind CSS** for accessible and modern components
 - **React Query** for efficient server state management
 - **Jest + Playwright** for comprehensive testing
-
-## License
-
-This project is private.

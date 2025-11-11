@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations, useLocale } from "next-intl";
 import { useAuth } from "@/hooks/use-auth";
 import { useChat, type Conversation } from "@/hooks/use-chat";
 
@@ -33,6 +34,8 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const t = useTranslations("dashboard");
+  const locale = useLocale();
   const router = useRouter();
   const { signOut, profile, user } = useAuth();
   const {
@@ -44,13 +47,13 @@ export default function DashboardLayout({
 
   const handleLogout = async () => {
     await signOut();
+    router.push(`/${locale}/login`);
   };
 
   const handleNewChat = async () => {
     try {
       const newConversation = await createConversation();
-      // Navegar al chat usando el router
-      router.push("/chat");
+      router.push(`/${locale}/chat`);
     } catch (error) {
       console.error("Error creating new conversation:", error);
     }
@@ -58,8 +61,7 @@ export default function DashboardLayout({
 
   const handleSelectConversation = async (conversation: Conversation) => {
     await selectConversation(conversation);
-    // Navegar al chat usando el router
-    router.push("/chat");
+    router.push(`/${locale}/chat`);
   };
 
   return (
@@ -76,7 +78,7 @@ export default function DashboardLayout({
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">
-                  {profile?.full_name || "Usuario"}
+                  {profile?.full_name || t("user")}
                 </p>
                 <p className="text-xs text-muted-foreground truncate">
                   {profile?.email || user?.email}
@@ -94,10 +96,10 @@ export default function DashboardLayout({
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     onClick={handleNewChat}
-                    tooltip="Nuevo Chat"
+                    tooltip={t("newChat")}
                   >
                     <Plus className="h-4 w-4" />
-                    <span>Nuevo Chat</span>
+                    <span>{t("newChat")}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>
@@ -106,7 +108,7 @@ export default function DashboardLayout({
 
           {conversations.length > 0 && (
             <SidebarGroup>
-              <SidebarGroupLabel>Conversaciones</SidebarGroupLabel>
+              <SidebarGroupLabel>{t("conversations")}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {conversations.slice(0, 10).map((conversation) => (
@@ -130,17 +132,17 @@ export default function DashboardLayout({
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Configuración">
-                <Link href="/settings">
+              <SidebarMenuButton asChild tooltip={t("settings")}>
+                <Link href={`/${locale}/settings`}>
                   <Settings className="h-4 w-4" />
-                  <span>Configuración</span>
+                  <span>{t("settings")}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={handleLogout} tooltip="Cerrar Sesión">
+              <SidebarMenuButton onClick={handleLogout} tooltip={t("signOut")}>
                 <LogOut className="h-4 w-4" />
-                <span>Cerrar Sesión</span>
+                <span>{t("signOut")}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
