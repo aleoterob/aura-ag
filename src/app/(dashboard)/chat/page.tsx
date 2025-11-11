@@ -148,7 +148,7 @@ const ChatBotDemo = () => {
       }
     }
 
-    // Enviar mensaje al AI
+    // Enviar mensaje OpenAI
     sendMessage(
       {
         text: message.text || "Sent with attachments",
