@@ -50,5 +50,22 @@
     "settings": "Configuración",
     "signOut": "Cerrar Sesión",
     "user": "Usuario"
+  },
+  "chat": {
+    "sentWithAttachments": "Enviado con archivos adjuntos",
+    "retry": "Reintentar",
+    "copy": "Copiar",
+    "search": "Buscar"
+  },
+  "promptInput": {
+    "placeholder": "¿Qué te gustaría saber?",
+    "addPhotosOrFiles": "Añadir fotos o archivos",
+    "attachment": "archivo adjunto",
+    "removeAttachment": "Eliminar archivo adjunto",
+    "error": {
+      "noFilesMatch": "Ningún archivo coincide con los tipos aceptados.",
+      "fileSizeExceeded": "Todos los archivos exceden el tamaño máximo.",
+      "tooManyFiles": "Demasiados archivos. Algunos no se añadieron."
+    }
   }
 }

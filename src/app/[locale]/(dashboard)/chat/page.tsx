@@ -46,6 +46,7 @@ import {
   ReasoningTrigger,
 } from "@/components/ai-elements/reasoning";
 import { Loader } from "@/components/ai-elements/loader";
+import { useTranslations } from "next-intl";
 
 const models = [
   {
@@ -73,6 +74,7 @@ const ChatBotDemo = () => {
     loading: supabaseLoading,
   } = useSupabaseChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations();
 
   // Auto scroll to bottom when new messages are added
   useEffect(() => {
@@ -151,7 +153,7 @@ const ChatBotDemo = () => {
     // Enviar mensaje OpenAI
     sendMessage(
       {
-        text: message.text || "Sent with attachments",
+        text: message.text || t("chat.sentWithAttachments"),
         files: message.files,
       },
       {
@@ -211,7 +213,7 @@ const ChatBotDemo = () => {
                                 <Actions className="mt-2">
                                   <Action
                                     onClick={() => regenerate()}
-                                    label="Retry"
+                                    label={t("chat.retry")}
                                   >
                                     <RefreshCcwIcon className="size-3" />
                                   </Action>
@@ -219,7 +221,7 @@ const ChatBotDemo = () => {
                                     onClick={() =>
                                       navigator.clipboard.writeText(part.text)
                                     }
-                                    label="Copy"
+                                    label={t("chat.copy")}
                                   >
                                     <CopyIcon className="size-3" />
                                   </Action>
@@ -281,7 +283,7 @@ const ChatBotDemo = () => {
                   onClick={() => setWebSearch(!webSearch)}
                 >
                   <GlobeIcon size={16} />
-                  <span>Buscar</span>
+                  <span>{t("chat.search")}</span>
                 </PromptInputButton>
                 <PromptInputModelSelect
                   onValueChange={(value) => {

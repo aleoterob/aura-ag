@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -81,6 +82,7 @@ export function PromptInputAttachment({
   ...props
 }: PromptInputAttachmentProps) {
   const attachments = usePromptInputAttachments();
+  const t = useTranslations("promptInput");
 
   return (
     <div
@@ -90,7 +92,7 @@ export function PromptInputAttachment({
     >
       {data.mediaType?.startsWith("image/") && data.url ? (
         <img
-          alt={data.filename || "attachment"}
+          alt={data.filename || t("attachment")}
           className="size-full rounded-md object-cover"
           height={56}
           src={data.url}
@@ -102,7 +104,7 @@ export function PromptInputAttachment({
         </div>
       )}
       <Button
-        aria-label="Remove attachment"
+        aria-label={t("removeAttachment")}
         className="-right-1.5 -top-1.5 absolute h-6 w-6 rounded-full opacity-0 group-hover:opacity-100"
         onClick={() => attachments.remove(data.id)}
         size="icon"
@@ -170,10 +172,12 @@ export type PromptInputActionAddAttachmentsProps = ComponentProps<
 };
 
 export const PromptInputActionAddAttachments = ({
-  label = "Add photos or files",
+  label,
   ...props
 }: PromptInputActionAddAttachmentsProps) => {
   const attachments = usePromptInputAttachments();
+  const t = useTranslations("promptInput");
+  const defaultLabel = label ?? t("addPhotosOrFiles");
 
   return (
     <DropdownMenuItem
@@ -183,7 +187,7 @@ export const PromptInputActionAddAttachments = ({
         attachments.openFileDialog();
       }}
     >
-      <ImageIcon className="mr-2 size-4" /> {label}
+      <ImageIcon className="mr-2 size-4" /> {defaultLabel}
     </DropdownMenuItem>
   );
 };
@@ -232,6 +236,7 @@ export const PromptInput = ({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const anchorRef = useRef<HTMLSpanElement>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
+  const t = useTranslations("promptInput");
 
   // Find nearest form to scope drag & drop
   useEffect(() => {
@@ -266,7 +271,7 @@ export const PromptInput = ({
       if (accepted.length === 0) {
         onError?.({
           code: "accept",
-          message: "No files match the accepted types.",
+          message: t("error.noFilesMatch"),
         });
         return;
       }
@@ -276,7 +281,7 @@ export const PromptInput = ({
       if (sized.length === 0 && accepted.length > 0) {
         onError?.({
           code: "max_file_size",
-          message: "All files exceed the maximum size.",
+          message: t("error.fileSizeExceeded"),
         });
         return;
       }
@@ -290,7 +295,7 @@ export const PromptInput = ({
         if (typeof capacity === "number" && sized.length > capacity) {
           onError?.({
             code: "max_files",
-            message: "Too many files. Some were not added.",
+            message: t("error.tooManyFiles"),
           });
         }
         const next: (FileUIPart & { id: string })[] = [];
@@ -306,7 +311,7 @@ export const PromptInput = ({
         return prev.concat(next);
       });
     },
-    [matchesAccept, maxFiles, maxFileSize, onError]
+    [matchesAccept, maxFiles, maxFileSize, onError, t]
   );
 
   const remove = useCallback((id: string) => {
@@ -458,9 +463,12 @@ export type PromptInputTextareaProps = ComponentProps<typeof Textarea>;
 export const PromptInputTextarea = ({
   onChange,
   className,
-  placeholder = "Que te gustaria saber?",
+  placeholder,
   ...props
 }: PromptInputTextareaProps) => {
+  const t = useTranslations("promptInput");
+  const defaultPlaceholder = placeholder ?? t("placeholder");
+
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
     if (e.key === "Enter") {
       // Don't submit if IME composition is in progress
@@ -496,7 +504,7 @@ export const PromptInputTextarea = ({
         onChange?.(e);
       }}
       onKeyDown={handleKeyDown}
-      placeholder={placeholder}
+      placeholder={defaultPlaceholder}
       {...props}
     />
   );

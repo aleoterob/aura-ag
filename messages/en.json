@@ -50,5 +50,22 @@
     "settings": "Settings",
     "signOut": "Sign Out",
     "user": "User"
+  },
+  "chat": {
+    "sentWithAttachments": "Sent with attachments",
+    "retry": "Retry",
+    "copy": "Copy",
+    "search": "Search"
+  },
+  "promptInput": {
+    "placeholder": "What would you like to know?",
+    "addPhotosOrFiles": "Add photos or files",
+    "attachment": "attachment",
+    "removeAttachment": "Remove attachment",
+    "error": {
+      "noFilesMatch": "No files match the accepted types.",
+      "fileSizeExceeded": "All files exceed the maximum size.",
+      "tooManyFiles": "Too many files. Some were not added."
+    }
   }
 }
