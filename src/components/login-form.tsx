@@ -105,7 +105,12 @@ export function LoginForm() {
             </div>
           </div>
 
-          <Button type="submit" className="w-full" size="lg" disabled={loading}>
+          <Button
+            type="submit"
+            className="w-full bg-accent hover:bg-accent/90"
+            size="lg"
+            disabled={loading}
+          >
             {loading ? t("submitting") : t("submit")}
           </Button>
 
@@ -114,7 +119,7 @@ export function LoginForm() {
               {t("noAccount")}{" "}
               <Link
                 href={`/${locale}/register`}
-                className="text-primary hover:text-primary/90 font-medium"
+                className="text-accent hover:text-accent/90 font-medium"
               >
                 {t("registerLink")}
               </Link>
