@@ -4,8 +4,9 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useAuth } from "@/hooks/use-auth";
-import { LoginForm } from "@/components/login-form";
+import { LoginForm } from "@/components/auth/login-form";
 import { RetroGrid } from "@/components/ui/retro-grid";
+import { AuthFooter } from "@/components/auth/auth-footer";
 
 export default function LoginPage() {
   const t = useTranslations("auth");
@@ -26,19 +27,20 @@ export default function LoginPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-card">
       <RetroGrid className="inset-0" />
-      <div className="relative flex flex-col z-10 min-h-screen items-center justify-center gap-10">
-        <div className="flex flex-col items-center justify-center gap-2">
-          <h1 className="text-6xl font-medium font-montserrat">
+      <div className="relative flex flex-col z-10 min-h-screen items-center justify-center gap-3 2xl:gap-10">
+        <div className="flex flex-col items-center justify-center gap-0 2xl:gap-2">
+          <h1 className="text-4xl 2xl:text-6xl font-medium font-montserrat">
             {t("appTitle")}
           </h1>
-          <h2 className="text-3xl font-light font-montserrat">
+          <h2 className="text-2xl 2xl:text-3xl font-light font-montserrat">
             {t("appDescription")}
           </h2>
-          <h3 className="text-xl font-light font-montserrat">
+          <h3 className="text-lg 2xl:text-xl font-light font-montserrat">
             {t("appSubtitle")}
           </h3>
         </div>
         <LoginForm />
+        <AuthFooter />
       </div>
     </div>
   );

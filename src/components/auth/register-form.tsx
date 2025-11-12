@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
@@ -16,25 +15,25 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 
-export function LoginForm() {
-  const t = useTranslations("auth.login");
+export function RegisterForm() {
+  const t = useTranslations("auth.register");
   const locale = useLocale();
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const { signIn } = useAuth();
+  const { signUp } = useAuth();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      await signIn(email, password);
-      router.push(`/${locale}/chat`);
+      await signUp(email, password, { full_name: fullName });
+      setError(t("success"));
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : t("error"));
     } finally {
@@ -45,11 +44,15 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-md border border-accent">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">{t("title")}</CardTitle>
-        <CardDescription>{t("description")}</CardDescription>
+        <CardTitle className="text-xl 2xl:text-2xl font-bold">
+          {t("title")}
+        </CardTitle>
+        <CardDescription className="text-sm 2xl:text-base">
+          {t("description")}
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleRegister} className="space-y-2 2xl:space-y-4">
           {error && (
             <div
               className={`px-4 py-3 rounded ${
@@ -61,6 +64,21 @@ export function LoginForm() {
               {error}
             </div>
           )}
+
+          <div className="space-y-2">
+            <label htmlFor="fullName" className="text-sm font-medium">
+              {t("fullName")}
+            </label>
+            <Input
+              id="fullName"
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder={t("fullNamePlaceholder")}
+              className="w-full"
+              required
+            />
+          </div>
 
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
@@ -90,6 +108,7 @@ export function LoginForm() {
                 placeholder={t("passwordPlaceholder")}
                 className="w-full pr-10"
                 required
+                minLength={6}
               />
               <button
                 type="button"
@@ -116,12 +135,12 @@ export function LoginForm() {
 
           <div className="text-center">
             <p className="text-sm text-card-foreground">
-              {t("noAccount")}{" "}
+              {t("hasAccount")}{" "}
               <Link
-                href={`/${locale}/register`}
+                href={`/${locale}/login`}
                 className="text-accent hover:text-accent/90 font-medium"
               >
-                {t("registerLink")}
+                {t("loginLink")}
               </Link>
             </p>
           </div>
