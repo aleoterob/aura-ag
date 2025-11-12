@@ -42,7 +42,7 @@ export function RegisterForm() {
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md border border-accent">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold">{t("title")}</CardTitle>
         <CardDescription>{t("description")}</CardDescription>
