@@ -14,7 +14,7 @@
     "previous": "Anterior"
   },
   "auth": {
-    "appTitle": "Aura AI",
+    "appTitle": "Aura",
     "appDescription": "AI Agent application",
     "appSubtitle": "Next.js | Vercel AI SDK | Supabase",
     "login": {

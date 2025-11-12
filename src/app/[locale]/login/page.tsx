@@ -29,10 +29,10 @@ export default function LoginPage() {
       <RetroGrid className="inset-0" />
       <div className="relative flex flex-col z-10 min-h-screen items-center justify-center gap-3 2xl:gap-10">
         <div className="flex flex-col items-center justify-center gap-0 2xl:gap-2">
-          <h1 className="text-4xl 2xl:text-6xl font-medium font-montserrat">
+          <h1 className="text-4xl 2xl:text-6xl font-light font-montserrat">
             {t("appTitle")}
           </h1>
-          <h2 className="text-2xl 2xl:text-3xl font-light font-montserrat">
+          <h2 className="text-2xl 2xl:text-2xl font-light font-montserrat">
             {t("appDescription")}
           </h2>
           <h3 className="text-lg 2xl:text-xl font-light font-montserrat">
