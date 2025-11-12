@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { LoginForm } from "@/components/auth/login-form";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import { AuthFooter } from "@/components/auth/auth-footer";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 
 export default function LoginPage() {
   const t = useTranslations("auth");
@@ -27,6 +28,7 @@ export default function LoginPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-card">
       <RetroGrid className="inset-0" />
+      <AnimatedThemeToggler className="absolute top-4 right-8 z-50" />
       <div className="relative flex flex-col z-10 min-h-screen items-center justify-center gap-3 2xl:gap-10">
         <div className="flex flex-col items-center justify-center gap-0 2xl:gap-2">
           <h1 className="text-4xl 2xl:text-6xl font-light font-montserrat">

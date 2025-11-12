@@ -47,6 +47,7 @@ import {
 } from "@/components/ai-elements/reasoning";
 import { Loader } from "@/components/ai-elements/loader";
 import { useTranslations } from "next-intl";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 
 const models = [
   {
@@ -168,6 +169,7 @@ const ChatBotDemo = () => {
 
   return (
     <div className="flex h-full flex-col">
+      <AnimatedThemeToggler className="absolute top-4 right-8 z-50" />
       <div className="flex-1 overflow-hidden">
         <div className="mx-auto max-w-3xl h-full">
           <Conversation className="h-full">
