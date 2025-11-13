@@ -1,7 +1,11 @@
+import { SidebarInset } from "@/components/ui/sidebar";
+
 export default function SettingsPage() {
   return (
-    <div>
-      <h1>Hola</h1>
-    </div>
+    <SidebarInset>
+      <div>
+        <h1>Hola</h1>
+      </div>
+    </SidebarInset>
   );
 }

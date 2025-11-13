@@ -48,6 +48,8 @@
     }
   },
   "dashboard": {
+    "navigation": "Navegación",
+    "chat": "Chat",
     "newChat": "Nuevo Chat",
     "conversations": "Conversaciones",
     "settings": "Configuración",
