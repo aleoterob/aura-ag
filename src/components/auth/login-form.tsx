@@ -43,7 +43,7 @@ export function LoginForm() {
   };
 
   return (
-    <Card className="w-full max-w-md border border-accent">
+    <Card className="w-full max-w-md border border-primary">
       <CardHeader className="text-center">
         <CardTitle className="text-xl 2xl:text-2xl font-bold">
           {t("title")}
@@ -111,7 +111,7 @@ export function LoginForm() {
 
           <Button
             type="submit"
-            className="w-full bg-accent hover:bg-accent/90"
+            className="w-full bg-primary hover:bg-primary/90"
             size="lg"
             disabled={loading}
           >
@@ -123,7 +123,7 @@ export function LoginForm() {
               {t("noAccount")}{" "}
               <Link
                 href={`/${locale}/register`}
-                className="text-accent hover:text-accent/90 font-medium"
+                className="text-primary hover:text-primary/90 font-medium"
               >
                 {t("registerLink")}
               </Link>
