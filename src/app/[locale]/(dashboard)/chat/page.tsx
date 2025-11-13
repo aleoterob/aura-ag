@@ -16,23 +16,26 @@ import {
   PromptInputAttachments,
   PromptInputBody,
   PromptInputButton,
+  PromptInputFooter,
+  PromptInputHeader,
   type PromptInputMessage,
-  PromptInputModelSelect,
-  PromptInputModelSelectContent,
-  PromptInputModelSelectItem,
-  PromptInputModelSelectTrigger,
-  PromptInputModelSelectValue,
+  PromptInputSelect,
+  PromptInputSelectContent,
+  PromptInputSelectItem,
+  PromptInputSelectTrigger,
+  PromptInputSelectValue,
   PromptInputSubmit,
   PromptInputTextarea,
-  PromptInputToolbar,
   PromptInputTools,
 } from "@/components/ai-elements/prompt-input";
-import { Actions, Action } from "@/components/ai-elements/actions";
+import {
+  MessageActions,
+  MessageAction,
+} from "@/components/ai-elements/message";
 import { useState, Fragment, useRef, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
 import { useChat as useSupabaseChat } from "@/hooks/use-chat";
 import { useAuth } from "@/hooks/use-auth";
-import { Response } from "@/components/ai-elements/response";
 import { GlobeIcon, RefreshCcwIcon, CopyIcon } from "lucide-react";
 import {
   Source,
@@ -237,27 +240,27 @@ const ChatBotDemo = () => {
                           <Fragment key={`${message.id}-${i}`}>
                             <Message from={message.role}>
                               <MessageContent>
-                                <Response>{part.text}</Response>
+                                <MessageContent>{part.text}</MessageContent>
                               </MessageContent>
                             </Message>
                             {message.role === "assistant" &&
                               i === messages.length - 1 && (
-                                <Actions className="mt-2">
-                                  <Action
+                                <MessageActions className="mt-2">
+                                  <MessageAction
                                     onClick={() => regenerate()}
                                     label={t("chat.retry")}
                                   >
                                     <RefreshCcwIcon className="size-3" />
-                                  </Action>
-                                  <Action
+                                  </MessageAction>
+                                  <MessageAction
                                     onClick={() =>
                                       navigator.clipboard.writeText(part.text)
                                     }
                                     label={t("chat.copy")}
                                   >
                                     <CopyIcon className="size-3" />
-                                  </Action>
-                                </Actions>
+                                  </MessageAction>
+                                </MessageActions>
                               )}
                           </Fragment>
                         );
@@ -293,16 +296,18 @@ const ChatBotDemo = () => {
       <div className="flex-shrink-0 bg-background">
         <div className="mx-auto max-w-3xl p-4">
           <PromptInput onSubmit={handleSubmit} globalDrop multiple>
-            <PromptInputBody>
+            <PromptInputHeader>
               <PromptInputAttachments>
                 {(attachment) => <PromptInputAttachment data={attachment} />}
               </PromptInputAttachments>
+            </PromptInputHeader>
+            <PromptInputBody>
               <PromptInputTextarea
                 onChange={(e) => setInput(e.target.value)}
                 value={input}
               />
             </PromptInputBody>
-            <PromptInputToolbar>
+            <PromptInputFooter>
               <PromptInputTools>
                 <PromptInputActionMenu>
                   <PromptInputActionMenuTrigger />
@@ -317,29 +322,29 @@ const ChatBotDemo = () => {
                   <GlobeIcon size={16} />
                   <span>{t("chat.search")}</span>
                 </PromptInputButton>
-                <PromptInputModelSelect
-                  onValueChange={(value) => {
+                <PromptInputSelect
+                  onValueChange={(value: string) => {
                     setModel(value);
                   }}
                   value={model}
                 >
-                  <PromptInputModelSelectTrigger>
-                    <PromptInputModelSelectValue />
-                  </PromptInputModelSelectTrigger>
-                  <PromptInputModelSelectContent>
+                  <PromptInputSelectTrigger>
+                    <PromptInputSelectValue />
+                  </PromptInputSelectTrigger>
+                  <PromptInputSelectContent>
                     {models.map((model) => (
-                      <PromptInputModelSelectItem
+                      <PromptInputSelectItem
                         key={model.value}
                         value={model.value}
                       >
                         {model.name}
-                      </PromptInputModelSelectItem>
+                      </PromptInputSelectItem>
                     ))}
-                  </PromptInputModelSelectContent>
-                </PromptInputModelSelect>
+                  </PromptInputSelectContent>
+                </PromptInputSelect>
               </PromptInputTools>
               <PromptInputSubmit disabled={!input && !status} status={status} />
-            </PromptInputToolbar>
+            </PromptInputFooter>
           </PromptInput>
         </div>
       </div>
