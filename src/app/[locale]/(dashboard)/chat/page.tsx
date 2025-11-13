@@ -76,12 +76,17 @@ const ChatBotDemo = () => {
     loading: supabaseLoading,
   } = useSupabaseChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const savedMessageIdsRef = useRef<Set<string>>(new Set());
   const t = useTranslations();
 
   // Auto scroll to bottom when new messages are added
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    savedMessageIdsRef.current.clear();
+  }, [currentConversation?.id]);
 
   // No crear conversación automáticamente - solo cuando el usuario envíe un mensaje
 
@@ -91,30 +96,53 @@ const ChatBotDemo = () => {
 
     const saveMessages = async () => {
       for (const message of messages) {
-        if (message.role === "user" || message.role === "assistant") {
-          try {
-            await addMessage(
-              currentConversation.id,
-              message.role,
-              message.parts?.find((part) => part.type === "text")?.text || "",
-              { parts: message.parts },
-              message.role === "assistant" ? model : undefined
-            );
-          } catch (error) {
-            // Solo loggear si el mensaje no existe ya
-            if (
-              !(error instanceof Error) ||
-              !error.message?.includes("duplicate")
-            ) {
-              console.error("Error saving message:", error);
-            }
+        const messageId = message.id;
+        if (!messageId || savedMessageIdsRef.current.has(messageId)) {
+          continue;
+        }
+
+        if (!(message.role === "user" || message.role === "assistant")) {
+          continue;
+        }
+
+        const textPart =
+          message.parts?.find((part) => part.type === "text")?.text || "";
+
+        if (message.role === "assistant") {
+          const isLatestMessage = messageId === messages.at(-1)?.id;
+          if (status === "streaming" && isLatestMessage) {
+            continue;
+          }
+          if (!textPart) {
+            continue;
+          }
+        }
+
+        try {
+          await addMessage(
+            currentConversation.id,
+            message.role,
+            textPart,
+            { parts: message.parts, messageId },
+            message.role === "assistant" ? model : undefined
+          );
+          savedMessageIdsRef.current.add(messageId);
+        } catch (error) {
+          // Solo loggear si el mensaje no existe ya
+          if (
+            !(error instanceof Error) ||
+            !error.message?.includes("duplicate")
+          ) {
+            console.error("Error saving message:", error);
+          } else {
+            savedMessageIdsRef.current.add(messageId);
           }
         }
       }
     };
 
     saveMessages();
-  }, [messages, currentConversation, addMessage, model]);
+  }, [messages, currentConversation, addMessage, model, status]);
 
   const handleSubmit = async (message: PromptInputMessage) => {
     const hasText = Boolean(message.text);
