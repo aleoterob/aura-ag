@@ -16,6 +16,8 @@ export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const conversationCreatedEventName = "chat-conversation-created";
+
   // Cargar conversaciones del usuario y configurar suscripción en tiempo real
   useEffect(() => {
     if (user) {
@@ -49,6 +51,48 @@ export function useChat() {
       setMessages([]);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleConversationCreated = (event: Event) => {
+      const customEvent = event as CustomEvent<Conversation>;
+      const conversation = customEvent.detail;
+
+      if (!conversation || conversation.user_id !== user?.id) {
+        return;
+      }
+
+      setConversations((prev) => {
+        const existingIndex = prev.findIndex(
+          (item) => item.id === conversation.id
+        );
+        if (existingIndex === 0) {
+          return prev;
+        }
+
+        if (existingIndex > 0) {
+          const updated = [...prev];
+          updated.splice(existingIndex, 1);
+          return [conversation, ...updated];
+        }
+
+        return [conversation, ...prev];
+      });
+    };
+
+    window.addEventListener(
+      conversationCreatedEventName,
+      handleConversationCreated as EventListener
+    );
+
+    return () => {
+      window.removeEventListener(
+        conversationCreatedEventName,
+        handleConversationCreated as EventListener
+      );
+    };
+  }, [user?.id]);
 
   const loadConversations = async () => {
     if (!user) return;
@@ -115,6 +159,14 @@ export function useChat() {
       await loadConversations();
       setCurrentConversation(data);
       setMessages([]);
+
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent<Conversation>(conversationCreatedEventName, {
+            detail: data,
+          })
+        );
+      }
 
       return data;
     } catch (error) {

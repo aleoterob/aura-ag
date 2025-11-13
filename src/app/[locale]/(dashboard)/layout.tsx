@@ -38,25 +38,15 @@ export default function DashboardLayout({
   const locale = useLocale();
   const router = useRouter();
   const { signOut, profile, user } = useAuth();
-  const {
-    conversations,
-    createConversation,
-    selectConversation,
-    currentConversation,
-  } = useChat();
+  const { conversations, selectConversation, currentConversation } = useChat();
 
   const handleLogout = async () => {
     await signOut();
     router.push(`/${locale}/login`);
   };
 
-  const handleNewChat = async () => {
-    try {
-      const newConversation = await createConversation();
-      router.push(`/${locale}/chat`);
-    } catch (error) {
-      console.error("Error creating new conversation:", error);
-    }
+  const handleNewChat = () => {
+    router.push(`/${locale}/chat?reset=${Date.now()}`);
   };
 
   const handleSelectConversation = async (conversation: Conversation) => {

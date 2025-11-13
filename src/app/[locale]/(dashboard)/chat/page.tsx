@@ -48,6 +48,7 @@ import {
 import { Loader } from "@/components/ai-elements/loader";
 import { useTranslations } from "next-intl";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import { useSearchParams } from "next/navigation";
 
 const models = [
   {
@@ -316,5 +317,11 @@ const ChatBotDemo = () => {
     </div>
   );
 };
+const ChatPage = () => {
+  const searchParams = useSearchParams();
+  const resetKey = searchParams.get("reset") ?? "default";
 
-export default ChatBotDemo;
+  return <ChatBotDemo key={resetKey} />;
+};
+
+export default ChatPage;
