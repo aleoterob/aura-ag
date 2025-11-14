@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useLocale, useTranslations } from "next-intl";
-import { useAuth } from "@/hooks/use-auth";
-import { LoginForm } from "@/components/auth/login-form";
-import { RetroGrid } from "@/components/ui/retro-grid";
-import { AuthFooter } from "@/components/auth/auth-footer";
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
+import { useAuth } from '@/hooks/use-auth';
+import { LoginForm } from '@/components/auth/login-form';
+import { RetroGrid } from '@/components/ui/retro-grid';
+import { AuthFooter } from '@/components/auth/auth-footer';
+import { AnimatedThemeToggler } from '@/components/ui/animated-theme-toggler';
 
 export default function LoginPage() {
-  const t = useTranslations("auth");
+  const t = useTranslations('auth');
   const router = useRouter();
   const locale = useLocale();
   const { isAuthenticated } = useAuth();
@@ -32,13 +32,13 @@ export default function LoginPage() {
       <div className="relative flex flex-col z-10 min-h-screen items-center justify-center gap-3 2xl:gap-10">
         <div className="flex flex-col items-center justify-center gap-0 2xl:gap-2">
           <h1 className="text-4xl 2xl:text-6xl font-light font-montserrat">
-            {t("appTitle")}
+            {t('appTitle')}
           </h1>
           <h2 className="text-2xl 2xl:text-2xl font-light font-montserrat">
-            {t("appDescription")}
+            {t('appDescription')}
           </h2>
           <h3 className="text-lg 2xl:text-xl font-light font-montserrat">
-            {t("appSubtitle")}
+            {t('appSubtitle')}
           </h3>
         </div>
         <LoginForm />
